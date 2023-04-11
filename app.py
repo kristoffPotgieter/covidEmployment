@@ -320,7 +320,12 @@ with demographics:
         st.write(yDf)
 
 with wages:
-    wages = pd.read_parquet('Data/Municipal_FTE_WageBand_Monthly.parquet')
+    @st.cache
+    def getWages():
+
+        wages = pd.read_parquet('Data/Municipal_FTE_WageBand_Monthly.parquet')
+        wages.FTE = wages.FTE.str.replace("<10","0").astype('float')
+        return wages
     if view == 'Month':
         monthlyWageDf = filterCleanDf(wages, var ='FTE', municipality=municipality, time='month', groupbyList=['RealWageBand'])
         figDf = monthlyWageDf.pivot(index='month', columns='RealWageBand', values='FTE').sort_index().diff().stack().reset_index().rename(columns={0: 'FTE change y-o-y'}).dropna().sort_values(['month','RealWageBand'])[-14*3*12:]
