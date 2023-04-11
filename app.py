@@ -349,9 +349,10 @@ with wages:
                     color_discrete_map=color_shades,
                     category_orders={"RealWageBand": list(color_shades.keys())},  # Specify the order of categories in the legend
                     width=width,
-                    height=height
+                    height=height,
+                    title = 'y-o-y Change in FTE Employment by Wage Band'
                     )
-        
+        fig.update_layout(title_x=0.5)
         y0 = figDf[figDf['FTE change y-o-y'] < 0]
         y0 = y0.groupby(figDf['month'])['FTE change y-o-y'].sum().min() - 200
         # st.write(y0)
