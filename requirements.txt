@@ -1,0 +1,6 @@
+seaborn
+plotly
+pandas
+numpy
+fastparquet
+pyarrow
