@@ -239,7 +239,8 @@ with demographics:
             # df.Youth  = df.Youth.str.replace("[35.0, 120.0)",">=35")
             df.FTE = df.FTE.str.replace("<10","0").astype('float')
             df.Youth  = df.Youth.str.replace("\\.0","")
-            
+            df.Sex = df.Sex.str.replace('M','Male')
+            df.Sex = df.Sex.str.replace('F','Female')
             keep = [x  in ['[15, 25)', '[15.0, 25.0)', '[25, 35)', '[25.0, 35.0)'] for x in df.Youth]
             df['ageGroup' ] = df.Youth.copy()
             df['Youth'] = keep
@@ -265,7 +266,7 @@ with demographics:
             return youthDf
         
         youthDf = load_youth_data(municipality=municipality)
-        for gender in ['F','M','Unknown']:
+        for gender in ['Female','Male','Unknown']:
             for youth in [True,False]:
                 selection = np.logical_and(youthDf.Sex == gender, youthDf.Youth == youth)
                 youthDf['FTE change y-o-y'][selection] = youthDf[selection].sort_values('month')['FTE'].diff(12)
@@ -276,10 +277,10 @@ with demographics:
 
 
         youthDf['Group'] =youthDf['Sex'] +" "+youthDf['Age']
-        colorMap = {'F Over 35 Y.O.':"#CA3433",
-        'F Under 35 Y.O.':"#FA8072",
-        'M Over 35 Y.O.':"#0F4D92",
-        'M Under 35 Y.O.':"#89CFF0",
+        colorMap = {'Female Over 35 Y.O.':"#CA3433",
+        'Female Under 35 Y.O.':"#FA8072",
+        'Male Over 35 Y.O.':"#0F4D92",
+        'Male Under 35 Y.O.':"#89CFF0",
         'Unknown Over 35 Y.O.':"Black",
         'Unknown Under 35 Y.O.': "#808080"}
 
@@ -350,7 +351,7 @@ with wages:
                     category_orders={"RealWageBand": list(color_shades.keys())},  # Specify the order of categories in the legend
                     width=width,
                     height=height,
-                    title = 'y-o-y Change in FTE Employment by Wage Band'
+                    title = 'Year-on-Year Change in FTE Employment by Wage Band'
                     )
         fig.update_layout(title_x=0.5)
         y0 = figDf[figDf['FTE change y-o-y'] < 0]
@@ -373,7 +374,7 @@ with wages:
         fig = px.sunburst(monthlyWageDf[monthlyWageDf.month == month], path=['RealWageBand'], 
                  values='FTE', 
                  color='RealWageBand',
-                title="Wages Composition "+month,
+                title="Wage Composition "+month,
                     color_discrete_map= color_shades ,
                     width =width,height=height)
         fig.update_layout( title_x=0.5)
