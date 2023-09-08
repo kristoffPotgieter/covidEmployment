@@ -166,7 +166,7 @@ with employment:
 
 
 
-        figDf = change.pivot(index='month',columns='Sector',values='FTE').sort_index().diff(12).iloc[-36:,:].stack().reset_index()
+        figDf = change.pivot(index='month',columns='Sector',values='FTE').sort_index().diff(12).iloc[-72:,:].stack().reset_index()
         figDf.columns = ['Month','Sector','FTE change y-o-y']
         fig = px.bar(figDf,x='Month',y='FTE change y-o-y',
         color='Sector',
